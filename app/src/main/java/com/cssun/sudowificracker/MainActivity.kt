@@ -5,12 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.net.Uri
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
-import android.system.Os.close
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -79,17 +78,13 @@ class MainActivity : AppCompatActivity() {
             } else {
 
 
-
-
-
-                val connManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                val wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                val isWifiEnabled = wifiInfo?.isConnected
+                val wifiManager = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val isWifiEnabled = wifiManager.isWifiEnabled
 
                 val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
                 val isLocationEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
 
-                if (!isWifiEnabled!! && !isLocationEnabled) {
+                if (!isWifiEnabled && !isLocationEnabled) {
                     // Both Wi-Fi and location are disabled
                     val dialog = AlertDialog.Builder(this)
                         .setTitle("Enable Wi-Fi and Location")
